@@ -1,4 +1,4 @@
 # PhD-Projects-SUD-COVID19
 
-Draft
+Check `EHR-Data-Process` folder before you delve into projects.
 
