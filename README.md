@@ -23,21 +23,21 @@ There are a series of tables in the entire healthcare database. To use basic cli
 The tables of diagnoses and encounters contain the basic hospitalization information of patients such as admission and discharge date, departments, length of stay, ICD-10 codes, etc. Diagnostic results, medication orders, and problem lists contain the patient's lab test, vital measurement, the medication used, and other diagnoses.
 
 ## Data Processing Workflow
-![Table Merging](Intro/images/Table Merging.png)
+![Table Merging](/Intro/images/Table%20Merging.png)
 
 Firstly, merge the diagnosis and encounter table by the key "patient_num" and "encounter_num". Then, the new table (concatenation of tables of encounter and diagnosis) merges the remaining tables separately. Suppose the merged table is too sparse, like diagnostic results, medication orders and problem lists. In that case, pivot tables are created based on the columns of lab test, medication used, and diagnoses respectively, and then drop the columns with too many missing values. Lastly, all tables are merged into one table by the key "patient_num" or with "encounter_num".
 
 ## Data Processing Steps
 
-![Data Path](Intro/images/Data Path.png)
+![Data Path](/Intro/images/Data%20Path.png)
 
-0. `config.py` is used to store the basic information:
+1. `config.py` is used to store the basic information:
    - Data location (The data path should follow the structure shown in the image: `.../Data/Froedtert/[data]`.)
    - Some locations to store your results
    - `enc_type` definition (For admitted patients, the types are 'IP', 'ED', 'UN', 'OS'. For general patients, you can include almost all types: 'IP', 'ED', 'UN', 'OS', 'AV', 'EI', 'IS')
    - ICD-code 10 definition
    - Columns needed.
-1. Merge the diagnosis and encounter table
+2. Merge the diagnosis and encounter table
 
 
 
