@@ -5,7 +5,7 @@ import sys
 sys.path.append('.')
 
 from utils import *
-from processing_utils import *
+from process_utils import *
 from config import *
 from data_config import *
 
@@ -14,7 +14,7 @@ def merge_databases(table_interested):
     # Merge 2 databases: covid-May2021 and COVID-June2021-Jan2023
 
     for table in table_interested:
-        target_path = os.path.join(COVID_MERGED_DATA_PATH, table + '.csv')
+        target_path = os.path.join('..', COVID_MERGED_DATA_PATH, table + '.csv')
         if os.path.exists(target_path):
             print(f'{table}.csv already exists, skip...')
             print('=' * 20)
@@ -33,7 +33,7 @@ def merge_databases(table_interested):
             table_merge = pd.concat([table_1, table_2], axis=0)
             table_merge = table_merge[table_column_dict[table]]
 
-            table_merge.to_csv(os.path.join(COVID_MERGED_DATA_PATH, table + '.csv'), index=False)
+            table_merge.to_csv(os.path.join('..', COVID_MERGED_DATA_PATH, table + '.csv'), index=False)
 
             print(f'Processed {table}.csv ...')
             print('=' * 20)
@@ -41,7 +41,7 @@ def merge_databases(table_interested):
     print('Merging data completed ...')
 
 
-def merge_diganosis_encounter():
+def merge_diagnosis_encounter():
     
     print('Loading diagnosis...')
     diagnosis_path = os.path.join(COVID_MERGED_DATA_PATH, 'diagnosis.csv')
@@ -84,18 +84,26 @@ def merge_diganosis_encounter():
         diag_enc_merge = diag_enc_merge.merge(dx_code_list_df, on=['patient_num', 'encounter_num'])
         
     diag_enc_merge = diag_enc_merge.drop(['dx_code'], axis=1)
-    
-    
+
     # Change the data type of 'xxx_date_shift' to datetime
     diag_enc_merge['dx_date_shifted'] = pd.to_datetime(diag_enc_merge['dx_date_shifted'])
     diag_enc_merge['admit_date_shifted'] = pd.to_datetime(diag_enc_merge['admit_date_shifted'])
     diag_enc_merge['discharge_date_shifted'] = pd.to_datetime(diag_enc_merge['discharge_date_shifted'])
 
-    # Drop the rows where 'dx_date_shifted' before date 2020-03-01
+    # Drop the rows where 'dx_date_shifted' before date 2020-03-01 when COVID-19 pandemic was broken
     diag_enc_merge = diag_enc_merge[diag_enc_merge['dx_date_shifted'] > datetime(2020, 3, 1)]
     # Change the data type of 'xxx_date_shift' to datetime
     diag_enc_merge['dx_date_shifted'] = pd.to_datetime(diag_enc_merge['dx_date_shifted']).dt.date
     diag_enc_merge['admit_date_shifted'] = pd.to_datetime(diag_enc_merge['admit_date_shifted']).dt.date
     diag_enc_merge['discharge_date_shifted'] = pd.to_datetime(diag_enc_merge['discharge_date_shifted']).dt.date
-    
-    
+
+    save_processed_data(diag_enc_merge, 'diag_enc_merge_original')
+
+    diag_enc_merge_los = load_processed_data('diag_enc_merge_original')
+
+    diag_enc_merge_los.dropna(subset=['admit_date_shifted'], inplace=True)
+    diag_enc_merge_los.dropna(subset=['discharge_date_shifted'], inplace=True)
+    diag_enc_merge_los.sort_values(["patient_num", "admit_date_shifted"], inplace=True)
+
+    print(diag_enc_merge_los['admit_date_shifted'].isnull().sum())
+    print(diag_enc_merge_los['discharge_date_shifted'].isnull().sum())

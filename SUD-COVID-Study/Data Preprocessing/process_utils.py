@@ -8,10 +8,6 @@ from utils import *
 
 
 
-
-
-
-
 # Re-calculate the length of stay of patients
 # Input: patient_df
 # Output: patient_df with updated length of stay

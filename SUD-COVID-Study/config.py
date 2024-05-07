@@ -20,17 +20,28 @@ COVID_SUD_DIR = os.path.join(data_dir, COVID_SUD_DATA_NAME)
 
 
 # Processed Data Location
-MERGED = '../Merged Data'
-COVID_MERGED_DATA_PATH = '../Merged Data/COVID-2020-2023'
-PROCESSED_DATA_PATH = '../Merged Data/Processed Data'
-PROCESSED_ML_DATA_PATH = '../Merged Data/Data for ML'
+# MERGED = '../Merged Data'
+# COVID_MERGED_DATA_PATH = '../Merged Data/COVID-2020-2023'
+# PROCESSED_DATA_PATH = '../Merged Data/Processed Data'
+# PROCESSED_ML_DATA_PATH = '../Merged Data/Data for ML'
+#
+# RESULTS = '../Results'
+# STAT_RESULTS = '../Results/STAT Results'
+# ML_RESULTS = '../Results/ML Results'
+# ML_MODELS = '../Results/Models'
+# STAT_RESULTS = '../Results/Stats Results'
 
-RESULTS = '../Results'
-STAT_RESULTS = '../Results/STAT Results'
-ML_RESULTS = '../Results/ML Results'
-ML_MODELS = '../Results/Models'
-STAT_RESULTS = '../Results/Stats Results'
 
+MERGED = 'Merged Data'
+COVID_MERGED_DATA_PATH = 'Merged Data/COVID-2020-2023'
+PROCESSED_DATA_PATH = 'Merged Data/Processed Data'
+PROCESSED_ML_DATA_PATH = 'Merged Data/Data for ML'
+
+RESULTS = 'Results'
+STAT_RESULTS = 'Results/STAT Results'
+ML_RESULTS = 'Results/ML Results'
+ML_MODELS = 'Results/Models'
+STAT_RESULTS = 'Results/Stats Results'
 
 
 def main():
