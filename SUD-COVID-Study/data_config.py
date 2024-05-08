@@ -1,9 +1,9 @@
     
 admission_enc_type_list = ['IP', 'ED', 'UN', 'OS']
 
-diagnosis_columns = ['patient_num', 'encounter_num', 'dx_date_shifted', 'dx_code']
+diagnosis_columns = ['patient_num', 'encounter_num', 'dx_date_shifted', 'dx_code', 'enc_type']
 
-encounters_columns = ['patient_num', 'encounter_num', 'age_at_visit_years', 'discharge_status_c', 'department_name',
+encounters_columns = ['patient_num', 'encounter_num', 'enc_type', 'age_at_visit_years', 'discharge_status_c',
                     'payor_type_primary_name', 'admit_date_shifted', 'discharge_date_shifted', 'length_of_stay_days']
 
 diagnostic_results_columns = ['patient_num', 'component_name', 'abnormal_ind', 'i2b2_date_shifted',
@@ -22,7 +22,7 @@ problem_list_columns = ['patient_num','encounter_num','dx_code','epic_dx_descrip
                         ,'noted_date_shifted','resolved_date_shifted','date_of_entry_shifted','chronic_yn'
                         ,'principal_pl_yn','hospital_pl_yn']
 
-immunization_columns = ['patient_num', 'immune_date_shifted', 'immunization_name']
+immunization_columns = ['patient_num', 'encounter_num', 'immune_date_shifted', 'immunization_name', 'immnztn_status_name']
 
 vitals_columns = ['patient_num', 'encounter_num', 'bmi']
 
