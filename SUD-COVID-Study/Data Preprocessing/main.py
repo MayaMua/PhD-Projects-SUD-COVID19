@@ -8,4 +8,10 @@ def main():
     # merge_diagnosis_encounter()
     merge_immune_data()
 
+    # Extract dead patient and alive patients.
+
+    
+
+
+
 main()

@@ -116,6 +116,7 @@ def merge_diagnosis_encounter():
 
     print('Counting the length of stay ...')
     diag_enc_merge_recalculate = count_los(diag_enc_merge)
+    diag_enc_merge_recalculate = diag_enc_merge_recalculate.dropna(columns=['length_of_stay_days'])
     save_processed_data(diag_enc_merge_recalculate, 'diag_enc_merge_covid_los_recalculate',
                         data_path=processed_data_path)
     print('Data saved successfully!')
@@ -146,13 +147,14 @@ def merge_immune_data():
     print(f'Processing immune...')
     immunization_path = os.path.join(covid_merged_data_path, 'immunization.csv')
     immu_df = load_data(immunization_path)
+    # Select patients with vaccination
     immu_df = immu_df[immu_df['immnztn_status_name'] == 'Given']
     immu_df = immu_df[immu_df['immunization_name'].str.contains('|'.join(immunization_name), na=False, case=False)]
     immu_df = immu_df[immu_df['immune_date_shifted'].notnull()]
     immu_df = immu_df.drop_duplicates(subset=['patient_num', 'encounter_num'], keep='first')
     immu_df = immu_df[immunization_columns].astype(str)
     immu_df['immune_date_shifted'] = pd.to_datetime(immu_df['immune_date_shifted'], format='%Y-%m-%d %H:%M:%S').dt.date
-
+    print(f'Set manufactures')
     immu_df['immu_mfg'] = immu_df['immunization_name'].apply(set_mfg)
     immu_df = immu_df.drop(columns=['immunization_name']).sort_values(by=['patient_num', 'immune_date_shifted'])
 
@@ -161,13 +163,14 @@ def merge_immune_data():
     fulfillment_dates = df_sorted.groupby('patient_num').apply(get_vaccine_fulfillment_date).dropna().reset_index()
     fulfillment_dates.columns = ['patient_num', 'date_of_full_vaccination']
 
+    print(f'Merge immnue with diag_encounter_table')
     fulfillment_dates["patient_num"] = fulfillment_dates["patient_num"].astype(str)
     all_patient = load_processed_data('diag_enc_merge_covid_los_recalculate', data_path=processed_data_path)
     all_patient["patient_num"] = all_patient["patient_num"].astype(str)
     fully_vaccinated_patients, not_fully_vaccinated_patients = filter_vaccinated_patients(fulfillment_dates,
                                                                                           all_patient)
     patients_with_vaccine_info = pd.concat([fully_vaccinated_patients, not_fully_vaccinated_patients])
-    neglect_columns = ['encounter_list', 'date_of_full_vaccination', 'length_of_stay_days']
+    neglect_columns = ['date_of_full_vaccination']
     all_patients = patients_with_vaccine_info.drop(columns=neglect_columns)
     save_processed_data(all_patients, 'all_patients_with_dxcode_vaccine_info', data_path=processed_data_path)
 
