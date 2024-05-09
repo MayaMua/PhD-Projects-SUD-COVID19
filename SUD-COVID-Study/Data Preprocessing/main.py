@@ -10,7 +10,7 @@ def main():
 
     # Extract dead patient and alive patients.
 
-    
+
 
 
 

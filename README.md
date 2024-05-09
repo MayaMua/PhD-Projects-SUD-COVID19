@@ -31,13 +31,13 @@ Firstly, merge the diagnosis and encounter table by the key "patient_num" and "e
 
 ![Data Path](/Intro/images/Data%20Path.png)
 
-1. `config.py` is used to store the basic information:
+1. `config.py` and `data_config.py` are used to store the basic information:
    - Data location (The data path should follow the structure shown in the image: `.../Data/Froedtert/[data]`.)
    - Some locations to store your results
    - `enc_type` definition (For admitted patients, the types are 'IP', 'ED', 'UN', 'OS'. For general patients, you can include almost all types: 'IP', 'ED', 'UN', 'OS', 'AV', 'EI', 'IS')
    - ICD-code 10 definition
    - Columns needed.
-2. Merge the diagnosis and encounter table
+2. Merge the diagnosis and encounter table to get basic patient information. And then, we filter admitted patients and recalculate the length of stay. Next, we also check the immunization status.Check the `Data Preprocessing/merge_data.py` for more details.
 
 
 
