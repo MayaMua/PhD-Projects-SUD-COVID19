@@ -173,5 +173,9 @@ def merge_immune_data():
     neglect_columns = ['date_of_full_vaccination']
     all_patients = patients_with_vaccine_info.drop(columns=neglect_columns)
     save_processed_data(all_patients, 'all_patients_with_dxcode_vaccine_info', data_path=processed_data_path)
-
+ 
     print(f'All patients with vaccine info!')
+
+
+def merge_patients_with_vaccine_info():
+    pass

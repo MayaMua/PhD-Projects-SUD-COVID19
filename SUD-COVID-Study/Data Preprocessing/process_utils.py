@@ -315,3 +315,33 @@ def get_readmissioin_mortality(patients_all, read_days=30):
     data_readmit_death = pd.concat([data_readmit, process_payment(patient_dead)])
 
     return data_readmit_death, data_readmit
+
+
+
+def get_readmissioin(patients_all, read_days=30):
+
+    data = patients_all
+
+    data['admit_date_shifted'] = pd.to_datetime(data['admit_date_shifted'])
+    data['discharge_date_shifted'] = pd.to_datetime(data['discharge_date_shifted'])
+
+    # Sort the dataframe by patient_num and admit_date_shifted
+    data.sort_values(['patient_num', 'admit_date_shifted'], ascending=[True, True], inplace=True)
+    # Calculate the number of days to next admission
+    data['days_to_next_admission'] = data.groupby('patient_num')['admit_date_shifted'].shift(-1) - data[
+        'discharge_date_shifted']
+    # Create a new column '30_day_readmission' and
+    # set its value to True where the next admission is within 30 days, False otherwise
+    days = str(read_days) + '_' + 'day_readmission'
+    data[days] = data['days_to_next_admission'].dt.days <= read_days
+
+    # For patients with no readmission
+    mask_no_readmission = ~data['patient_num'].isin(data.loc[data[days]]['patient_num'])
+    data_no_readmission = data.loc[mask_no_readmission]
+
+    # Combine dataframes
+    data_readmit = pd.concat([data.loc[data[days]], data_no_readmission])
+    data_readmit.drop(columns=['days_to_next_admission'], inplace=True)
+    data_readmit.sort_values(['patient_num', 'admit_date_shifted'], ascending=[True, True], inplace=True)
+
+    return data_readmit
